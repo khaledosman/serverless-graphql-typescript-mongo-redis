@@ -1,0 +1,140 @@
+{
+  "name": "serverless-graphql-ts",
+  "version": "1.0.0",
+  "description": "Serverless webpack example using Typescript",
+  "main": "handler.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:khaledosman/serverless-graphql-mongodb-lambda.git"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "semantic-release-slack-bot",
+        {
+          "notifyOnSuccess": true,
+          "notifyOnFail": false,
+          "onSuccessTemplate": {
+            "text": "A new version of $package_name with version $npm_package_version has been released at $repo_url ! \n $release_notes"
+          },
+          "markdownReleaseNotes": true
+        }
+      ],
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
+      "@semantic-release/changelog",
+      "@semantic-release/git"
+    ]
+  },
+  "standardx": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint/eslint-plugin"
+    ]
+  },
+  "standard": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint/eslint-plugin"
+    ]
+  },
+  "scripts": {
+    "preinstall": "node -e '!process.env.npm_config_user_agent.startsWith(\"yarn/\")&&!console.log(\"Use `yarn install` to install dependencies in this repository\\n\")&&process.exit(1)'",
+    "start": "yarn apollo:push --variant=offline && sls offline start",
+    "debug": "node --inspect --debug-port=9229 node_modules/serverless/bin/serverless offline start",
+    "test": "snyk test",
+    "commit": "npx git-cz",
+    "release": "npx semantic-release",
+    "commitizen": "exec < /dev/tty && git cz",
+    "eslint": "eslint --cache api/**/*.ts database/**/*.ts graphql/**/*.ts helpers/**/*.ts interfaces/**/*.ts",
+    "eslint:fix": "eslint --cache --fix api/**/*.ts database/**/*.ts graphql/**/*.ts helpers/**/*.ts interfaces/**/*.ts",
+    "lint": "standardx **/*.ts",
+    "lint:fix": "standardx --fix **/*.ts",
+    "deploy": "yarn deploy:dev",
+    "deploy:dev": "sls deploy --stage dev --region eu-central-1 --aws-s3-accelerate && yarn apollo:push --variant=dev",
+    "deploy:live": "sls deploy --stage live --region us-east-1 --aws-s3-accelerate && yarn apollo:push --variant=live",
+    "deploy-func:dev": "sls deploy function --stage dev --region eu-central-1 --aws-s3-accelerate",
+    "deploy-func:live": "sls deploy function --stage live --region us-east-1 --aws-s3-accelerate",
+    "remove:dev": "sls remove --stage dev --region eu-central-1",
+    "remove:live": "sls remove --stage live --region us-east-1",
+    "logs:dev": "sls logs --stage dev --region eu-central-1 -t -f graphqlHandler",
+    "logs:live": "sls logs --stage live --region us-east-1 -t -f graphqlHandler",
+    "apollo:push": "npx apollo service:push"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "dependencies": {
+    "apollo-server-cache-redis": "^1.2.2",
+    "apollo-server-lambda": "^2.18.2",
+    "apollo-server-plugin-response-cache": "^0.5.5",
+    "aws-xray-sdk-core": "^3.2.0",
+    "axios": "^0.20.0",
+    "bcryptjs": "^2.4.3",
+    "graphql": "^15.3.0",
+    "graphql-fields": "^2.0.3",
+    "ioredis": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.9",
+    "source-map-support": "^0.5.19"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/npm": "^7.0.6",
+    "@semantic-release/release-notes-generator": "^9.0.1",
+    "@types/aws-lambda": "^8.10.63",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/ioredis": "^4.17.5",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongoose": "^5.7.36",
+    "@types/node": "^14.11.8",
+    "@typescript-eslint/eslint-plugin": "^4.4.0",
+    "@typescript-eslint/parser": "^4.4.0",
+    "apollo": "^2.31.0",
+    "aws-sdk": "^2.771.0",
+    "copy-webpack-plugin": "^6.2.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint-import-resolver-typescript": "^2.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "fork-ts-checker-webpack-plugin": "^5.2.0",
+    "husky": "^4.3.0",
+    "semantic-release": "^17.2.1",
+    "semantic-release-slack-bot": "^1.6.2",
+    "serverless": "^2.6.0",
+    "serverless-offline": "^6.8.0",
+    "serverless-plugin-select": "^2.0.0-rc.1",
+    "serverless-plugin-warmup": "^4.9.0",
+    "serverless-prune-plugin": "^1.4.3",
+    "serverless-snyk": "^1.2.0",
+    "serverless-webpack": "^5.3.5",
+    "standard": "^14.3.4",
+    "standardx": "^5.0.0",
+    "ts-loader": "^8.0.4",
+    "typescript": "^4.0.3",
+    "webpack": "^5.0.0",
+    "webpack-bundle-analyzer": "^3.9.0",
+    "webpack-cli": "^4.0.0",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "author": "Khaled Osman",
+  "license": "MIT"
+}
