@@ -1,7 +1,7 @@
 {
   "configurations": [
     {
-      "name": "OVS Lambdas",
+      "name": "My Lambdas",
       "type": "node",
       "request": "launch",
       "runtimeArgs": [

@@ -10,27 +10,11 @@ export const handler: CloudWatchLogsHandler | APIGatewayProxyHandler = async (ev
   context.callbackWaitsForEmptyEventLoop = false
   try {
     const connection: Connection = await initConnection()
-    const Team = connection.model('Team')
-    await Team.find({})
-
-    // await Promise.all([
-    //   SportRadarOdds.bulkWrite(
-    //     flattenedResults
-    //       .map(item => ({
-    //         updateOne: {
-    //           filter: { id: item.id },
-    //           update: { $set: item },
-    //           upsert: true
-    //         }
-    //       }
-    //       )))
-    // ])
+    const User = connection.model('User')
+    await User.find({})
   } catch (error) {
     console.error(error.response ? error.response : error.message)
     throw error
-    // return {
-    //   statusCode: error.statusCode || error.status || (error.response && error.response.status) || 500,
-    //   body: (error.response && error.response.message) || error.message || error.error || 'Internal Server Error'
-    // }
+    
   }
 }

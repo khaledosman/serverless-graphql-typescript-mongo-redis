@@ -11,9 +11,7 @@ let cachedConnection: Connection = null
 function setupMongooseModels (connection: Connection): void {
   try {
     // Dont redefine the model if its already defined, check if its there, if it fails re-define it
-    
     connection.model('User')
-    
     console.log('using cached models')
   } catch (error) {
     console.log('setting up models')

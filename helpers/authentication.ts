@@ -1,17 +1,16 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-import { OvsToken } from '../interfaces/OvsToken'
 const saltRounds = 10
 
 export function signToken ({ _id }, { expiresIn = '10d' } = { expiresIn: '10d' }): string {
   return jwt.sign({ _id, createdAt: Date.now() }, process.env.AUTH_SECRET, { expiresIn })
 }
 
-export function verifyToken (token: string): Promise<OvsToken> {
+export function verifyToken (token: string): Promise<any> {
   return new Promise((resolve, reject) => {
     jwt.verify(token, process.env.AUTH_SECRET, function (err, decoded) {
       if (err) reject(err)
-      resolve(decoded as OvsToken)
+      resolve(decoded as any)
     })
   })
 }
@@ -31,7 +30,7 @@ export function comparePassword (password: string, hash: string): Promise<boolea
   return bcrypt.compare(password, hash)
 }
 
-export function validateAuthHeader (authHeader: string): Promise<OvsToken> {
+export function validateAuthHeader (authHeader: string): Promise<any> {
   if (!authHeader) {
     throw new Error('No auth header was sent')
   }
