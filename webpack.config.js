@@ -9,7 +9,11 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const commonPlugins = []
 const plugins = slsw.lib.webpack.isLocal ? [...commonPlugins, new ForkTsCheckerWebpackPlugin({
   eslint: {
-    files: '**/*.{ts,tsx,js,jsx}'
+    files: '**/*.{ts,tsx,js,jsx}',
+    options: {
+      fix: true,
+      cache: true
+    }
   }
 })] : commonPlugins
 module.exports = {
