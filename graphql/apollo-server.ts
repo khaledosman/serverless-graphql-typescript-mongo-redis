@@ -1,4 +1,5 @@
 import { ApolloServer } from 'apollo-server-lambda'
+import { ApolloServerPluginUsageReporting } from 'apollo-server-core'
 import responseCachePlugin from 'apollo-server-plugin-response-cache'
 import { RedisCache } from 'apollo-server-cache-redis'
 
@@ -9,6 +10,7 @@ import { typeDefs } from './schema'
 const IS_OFFLINE = process.env.IS_OFFLINE
 
 export function createApolloServer (redisCache: RedisCache): ApolloServer {
+  const commonPlugins = [ApolloServerPluginUsageReporting({ sendReportsImmediately: true })]
   const server: ApolloServer = new ApolloServer({
     typeDefs,
     resolvers,
@@ -19,16 +21,8 @@ export function createApolloServer (redisCache: RedisCache): ApolloServer {
     introspection: true, // Boolean(IS_OFFLINE),
     tracing: Boolean(IS_OFFLINE),
     cacheControl: { defaultMaxAge: 60 * 60 }, // 1h
-    ...(!IS_OFFLINE && {
-      engine: {
-        apiKey: process.env.ENGINE_API_KEY,
-        sendReportsImmediately: true,
-        // debugPrintReports: true,
-        schemaTag: IS_OFFLINE ? 'offline' : process.env.AWS_STAGE
-      }
-    }),
     ...(!IS_OFFLINE && { cache: redisCache }),
-    plugins: [IS_OFFLINE ? responseCachePlugin() : responseCachePlugin({ cache: redisCache })],
+    plugins: IS_OFFLINE ? [...commonPlugins, responseCachePlugin()] : [...commonPlugins, responseCachePlugin({ cache: redisCache })],
     context: async ({ event, context }): Promise<any> => {
     // get the user token from the headers
       const mongooseConnection = context.mongooseConnection

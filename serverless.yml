@@ -59,6 +59,9 @@ provider:
     NODE_ENV: production
     SQS_QUEUE_URL: ${self:custom.environment.SQS_QUEUE_URL}
     S3_BUCKET: ${self:custom.environment.S3_BUCKET}
+    APOLLO_KEY: ${self:custom.environment.APOLLO_KEY}
+    APOLLO_GRAPH_VARIANT: ${self:custom.environment.APOLLO_GRAPH_VARIANT}
+    APOLLO_SCHEMA_REPORTING: ${self:custom.environment.APOLLO_SCHEMA_REPORTING}
 
   iamRoleStatements:
     - Effect: Allow
