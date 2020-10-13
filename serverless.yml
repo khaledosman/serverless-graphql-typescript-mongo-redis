@@ -5,7 +5,7 @@ service:
 
 custom:
   aws_profile: "dev"
-  environment: ${file(env.yml):${self:provider.stage}, file(env.yml):default}
+  environment: ${file(env.yml):${self:provider.stage}, file(env.yml):offline}
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
@@ -40,7 +40,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: ${opt:stage, 'dev'}
+  stage: ${opt:stage, 'offline'}
   profile: ${self:custom.aws_profile} # aws credentials profile to use
   region: ${opt:region, 'eu-central-1'}
   apiGateway:
@@ -62,6 +62,7 @@ provider:
     APOLLO_KEY: ${self:custom.environment.APOLLO_KEY}
     APOLLO_GRAPH_VARIANT: ${self:custom.environment.APOLLO_GRAPH_VARIANT}
     APOLLO_SCHEMA_REPORTING: ${self:custom.environment.APOLLO_SCHEMA_REPORTING}
+    AWS_STAGE: ${self:provider.stage}
 
   iamRoleStatements:
     - Effect: Allow

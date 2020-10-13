@@ -1,5 +1,4 @@
 import { ApolloServer } from 'apollo-server-lambda'
-import { ApolloServerPluginUsageReporting } from 'apollo-server-core'
 import responseCachePlugin from 'apollo-server-plugin-response-cache'
 import { RedisCache } from 'apollo-server-cache-redis'
 
@@ -10,13 +9,13 @@ import { typeDefs } from './schema'
 const IS_OFFLINE = process.env.IS_OFFLINE
 
 export function createApolloServer (redisCache: RedisCache): ApolloServer {
-  const commonPlugins = [ApolloServerPluginUsageReporting({ sendReportsImmediately: true })]
+  const commonPlugins = []
   const server: ApolloServer = new ApolloServer({
     typeDefs,
     resolvers,
     mocks: false, /* {    Date: () => {      return new Date()}} */
     playground: {
-      endpoint: IS_OFFLINE ? 'http://localhost:3000/dev/graphql' : `${process.env.BASE_URL}/graphql`
+      endpoint: IS_OFFLINE ? `http://localhost:3000/${process.env.AWS_STAGE}/graphql` : `${process.env.BASE_URL}/graphql`
     },
     introspection: true, // Boolean(IS_OFFLINE),
     tracing: Boolean(IS_OFFLINE),

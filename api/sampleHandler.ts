@@ -15,6 +15,5 @@ export const handler: CloudWatchLogsHandler | APIGatewayProxyHandler = async (ev
   } catch (error) {
     console.error(error.response ? error.response : error.message)
     throw error
-    
   }
 }
