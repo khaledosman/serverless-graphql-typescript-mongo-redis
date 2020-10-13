@@ -33,6 +33,7 @@ export function createApolloServer (redisCache: RedisCache): ApolloServer {
     // get the user token from the headers
       const mongooseConnection = context.mongooseConnection
       const redisClient = context.redisClient
+      console.log(event.headers)
       // try {
       //   const decodedToken = await validateAuthHeader(event.headers.Authorization || event.headers.authorization)
       //   // try to retrieve a user with the token

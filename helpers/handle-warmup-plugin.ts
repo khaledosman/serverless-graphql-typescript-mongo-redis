@@ -1,4 +1,6 @@
-export function isWarmupRequest (event: any, context: any): boolean {
+import { APIGatewayEvent, Context } from 'aws-lambda'
+
+export function isWarmupRequest (event: APIGatewayEvent & any, context: Context & any): boolean {
   if (
     event.source === 'serverless-plugin-warmup' ||
     (context.custom && context.custom.source === 'serverless-plugin-warmup')

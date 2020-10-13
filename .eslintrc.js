@@ -28,7 +28,7 @@ module.exports = {
     "project": "./tsconfig.json",
     "tsconfigRootDir": "./",
     "sourceType": "module",
-    "ecmaVersion": esnext
+    "ecmaVersion": 2021
   },
   "rules": {
     "no-unused-vars": "off",

@@ -6,9 +6,12 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 // const CopyPlugin = require('copy-webpack-plugin')
 // const PnpWebpackPlugin = require('pnp-webpack-plugin')
 
-const plugins = [
-  // new BundleAnalyzerPlugin(),
-]
+const commonPlugins = []
+const plugins = slsw.lib.webpack.isLocal ? [...commonPlugins, new ForkTsCheckerWebpackPlugin({
+  eslint: {
+    files: '**/*.{ts,tsx,js,jsx}'
+  }
+})] : commonPlugins
 module.exports = {
   context: __dirname,
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
@@ -53,14 +56,7 @@ module.exports = {
       }
     ]
   },
-  plugins: plugins, /* slsw.lib.webpack.isLocal ? [...plugins, new ForkTsCheckerWebpackPlugin(
-    {
-      eslint: true,
-      eslintOptions: {
-        cache: true
-      }
-    }
-  )] : plugins, */
+  plugins: plugins,
   performance: {
     hints: 'warning'
   }
