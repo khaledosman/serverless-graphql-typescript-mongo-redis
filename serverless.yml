@@ -36,7 +36,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   stage: ${opt:stage, 'offline'}
   profile: ${self:custom.aws_profile} # aws credentials profile to use
   region: ${opt:region, 'eu-central-1'}
