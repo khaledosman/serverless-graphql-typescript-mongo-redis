@@ -1,7 +1,4 @@
-service:
-  name: my-service-name
-# app: my-serverless-app-name
-# org: my-serverless-org
+service: my-service-name
 
 custom:
   aws_profile: "dev"
@@ -43,7 +40,9 @@ provider:
   stage: ${opt:stage, 'offline'}
   profile: ${self:custom.aws_profile} # aws credentials profile to use
   region: ${opt:region, 'eu-central-1'}
+  lambdaHashingVersion: 20201221
   apiGateway:
+    shouldStartNameWithService: true
     minimumCompressionSize: 1024
   tracing:
     apiGateway: true
@@ -64,28 +63,30 @@ provider:
     APOLLO_SCHEMA_REPORTING: ${self:custom.environment.APOLLO_SCHEMA_REPORTING}
     AWS_STAGE: ${self:provider.stage}
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - lambda:*
-      Resource: "*"
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - lambda:*
+          Resource: "*"
 
-    - Effect: "Allow"
-      Action:
-        - "ses:SendEmail"
-        - "ses:SendRawEmail"
-      Resource:
-        - "*"
+        - Effect: "Allow"
+          Action:
+            - "ses:SendEmail"
+            - "ses:SendRawEmail"
+          Resource:
+            - "*"
 
-    - Effect: "Allow"
-      Action:
-        - s3:*
-      Resource: "*"
+        - Effect: "Allow"
+          Action:
+            - s3:*
+          Resource: "*"
 
-    - Effect: "Allow"
-      Action:
-        - "sqs:*"
-      Resource: "*"
+        - Effect: "Allow"
+          Action:
+            - "sqs:*"
+          Resource: "*"
 
 package: # Optional deployment packaging configuration
   # include: # Specify the directories and files which should be included in the deployment package
